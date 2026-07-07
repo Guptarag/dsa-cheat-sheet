@@ -837,9 +837,38 @@ function slugify(cat){
   return cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
 }
 
+// Storage abstraction: uses window.storage when running inside the Claude.ai
+// artifact panel; falls back to real localStorage when opened as a standalone
+// downloaded HTML file (where window.storage doesn't exist).
+const hasArtifactStorage = (typeof window !== 'undefined') && !!window.storage;
+
+async function storageGet(key){
+  if(hasArtifactStorage){
+    try{
+      return await window.storage.get(key, false);
+    }catch(e){
+      return null; // key doesn't exist yet, or a transient error
+    }
+  }
+  try{
+    const raw = localStorage.getItem(key);
+    return raw !== null ? { key, value: raw, shared: false } : null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function storageSet(key, value){
+  if(hasArtifactStorage){
+    return await window.storage.set(key, value, false);
+  }
+  localStorage.setItem(key, value);
+  return { key, value, shared: false };
+}
+
 async function loadProgress(){
   try{
-    const res = await window.storage.get(STORAGE_KEY, false);
+    const res = await storageGet(STORAGE_KEY);
     if(res && res.value){
       const parsed = JSON.parse(res.value);
       // support both old format (flat solved map) and new format ({solved, flagged, streak})
@@ -865,7 +894,7 @@ let pendingSave = false;
 function scheduleSave(){
   setStatus("saving…");
   if(saveTimer) clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => { doSave(); }, 500);
+  saveTimer = setTimeout(() => { doSave(); }, 300);
 }
 
 async function doSave(attempt = 1){
@@ -875,7 +904,7 @@ async function doSave(attempt = 1){
   }
   saveInFlight = true;
   try{
-    await window.storage.set(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }), false);
+    await storageSet(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }));
     setStatus("saved ✓");
   }catch(e){
     console.error("save failed", e);
@@ -893,6 +922,26 @@ async function doSave(attempt = 1){
     }
   }
 }
+
+// Force an immediate, synchronous-as-possible save right before the page
+// unloads or is refreshed, so a debounced save in flight isn't lost.
+function flushSaveNow(){
+  if(saveTimer) clearTimeout(saveTimer);
+  try{
+    if(!hasArtifactStorage){
+      // localStorage.setItem is synchronous, so this reliably completes
+      // even during unload.
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }));
+    }
+  }catch(e){
+    console.error("flush save failed", e);
+  }
+}
+window.addEventListener('beforeunload', flushSaveNow);
+window.addEventListener('pagehide', flushSaveNow);
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'hidden') flushSaveNow();
+});
 
 function setStatus(msg){
   const el = document.getElementById('loadStatus');
