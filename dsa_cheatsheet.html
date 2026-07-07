@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DSA Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface-hi: #f0ede4;
+    --line: #ddd7c8;
+    --text: #262420;
+    --muted: #75705f;
+    --focus: #2f5233;
+    --focus-soft: rgba(47,82,51,0.08);
+    --warn: #a1652a;
+    --warn-soft: rgba(161,101,42,0.10);
+    --font-display: 'Lexend', sans-serif;
+    --font-mono: 'Lexend', sans-serif;
+    --font-body: 'Lexend', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 0 0 80px 0;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; padding: 40px 20px; }
+
+  header{ margin-bottom: 26px; border-bottom: 2px solid var(--text); padding-bottom: 18px; }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .sub{ color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 60ch; }
+
+  .progress-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    margin-top: 22px;
+  }
+  .progress-top{
+    display:flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .progress-count{
+    font-family: var(--font-mono);
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .progress-count span{ color: var(--focus); }
+  .progress-pct{ font-family: var(--font-mono); color: var(--warn); font-size: 13px; font-weight: 600; }
+  .bar-track{
+    display:flex; gap: 2px; height: 8px; width: 100%;
+  }
+  .bar-block{
+    flex: 1; background: var(--surface-hi); border: 1px solid var(--line); border-radius: 1px;
+    transition: background 0.25s ease;
+  }
+  .bar-block.filled{ background: var(--focus); border-color: var(--focus); }
+
+  .streak-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .streak-top{
+    display:flex; align-items:center; gap: 20px;
+    margin-bottom: 10px;
+  }
+  .streak-block{ text-align:left; }
+  .streak-number{
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--warn);
+    line-height: 1.1;
+  }
+  .streak-number-muted{ color: var(--text); font-size: 18px; }
+  .streak-label{
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+  .streak-divider{
+    width: 1px; height: 34px;
+    background: var(--line);
+  }
+  .streak-nudge{
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .streak-quote{
+    font-size: 12.5px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    border-top: 1px solid var(--surface-hi);
+    padding-top: 8px;
+  }
+
+  .controls{
+    display:flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap;
+  }
+  #search{
+    flex: 1; min-width: 180px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    outline: none;
+  }
+  #search:focus{ border-color: var(--focus); }
+  #search::placeholder{ color: var(--muted); }
+  .reset-btn{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .reset-btn:hover{ border-color: #a1442a; color: #a1442a; }
+
+  .category{
+    margin-bottom: 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .category + .category{ margin-top: 12px; }
+  .cat-head{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select:none;
+  }
+  .cat-head:hover{ background: var(--surface-hi); }
+  .cat-title{
+    display:flex; align-items:center; gap:10px;
+  }
+  .cat-index{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .cat-name{ font-weight: 600; font-size: 15px; }
+  .cat-meta{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 12px; color: var(--muted);
+    display:flex; align-items:center; gap: 8px;
+  }
+  .chevron{
+    transition: transform 0.2s ease;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .category.open .chevron{ transform: rotate(90deg); }
+
+  .cat-body{
+    display:none;
+    border-top: 1px solid var(--line);
+  }
+  .category.open .cat-body{ display:block; }
+
+  .problem-row{
+    display:flex; align-items:flex-start; gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--surface-hi);
+    text-decoration:none;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .problem-row:last-child{ border-bottom:none; }
+  .problem-row:hover{ background: var(--focus-soft); }
+
+  .check{
+    width: 19px; height: 19px;
+    margin-top: 2px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    background: var(--bg);
+  }
+  .check.done{ background: var(--focus); border-color: var(--focus); }
+  .check.done::after{ content: "✓"; font-size: 12px; color: #fff; font-weight:700; }
+
+  .flag-btn{
+    display:flex; align-items:center; gap: 5px;
+    flex-shrink:0;
+    cursor:pointer;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 5px 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .flag-btn:hover{ border-color: var(--warn); color: var(--warn); }
+  .flag-btn.flagged{ background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+
+  .p-content{ flex: 1; min-width: 0; }
+  .p-name{
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+  }
+  .p-name.done{ color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .p-desc{
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.45;
+  }
+  .p-desc.done{ opacity: 0.6; }
+
+  .problem-row.flagged{ background: var(--warn-soft); border-left: 3px solid var(--warn); }
+  .problem-row.flagged.hidden{ background: none; border-left: none; }
+
+  .filter-toggle{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .filter-toggle:hover{ border-color: var(--warn); color: var(--warn); }
+  .filter-toggle.active{ border-color: var(--warn); color: var(--warn); background: var(--warn-soft); }
+
+  .flag-count{
+    font-family: var(--font-mono); font-weight: 600; color: var(--warn); font-size: 13px;
+  }
+
+  .open-icon{
+    font-size: 12px; color: var(--muted); opacity:0;
+    margin-top: 3px;
+    transition: opacity 0.15s ease;
+  }
+  .problem-row:hover .open-icon{ opacity:1; }
+
+  .hidden{ display:none !important; }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 30px;
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">daily practice</div>
+    <h1>DSA Cheat Sheet</h1>
+    <div class="sub">Click a problem to open it on LeetCode. Each one has a one-line description so you know what it's asking before you click. Check it off once solved, flag the ones you couldn't crack — everything's saved automatically.</div>
+  </header>
+
+  <div class="progress-card">
+    <div class="progress-top">
+      <div class="progress-count"><span id="doneCount">0</span> / <span id="totalCount">0</span> solved</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span class="flag-count">🚩 <span id="flagCount">0</span> flagged</span>
+        <div class="progress-pct" id="pctText">0%</div>
+      </div>
+    </div>
+    <div class="bar-track" id="barTrack"></div>
+  </div>
+
+  <div class="streak-card">
+    <div class="streak-top">
+      <div class="streak-block">
+        <div class="streak-number">🔥 <span id="streakCurrent">0</span></div>
+        <div class="streak-label">day streak</div>
+      </div>
+      <div class="streak-divider"></div>
+      <div class="streak-block">
+        <div class="streak-number streak-number-muted"><span id="streakLongest">0</span></div>
+        <div class="streak-label">best streak</div>
+      </div>
+    </div>
+    <div class="streak-nudge" id="streakNudge">Solve one problem today to start your streak.</div>
+    <div class="streak-quote" id="streakQuote"></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search a problem... (e.g. LRU, topological, knapsack)">
+    <button class="filter-toggle" id="flaggedFilterBtn">🚩 Show flagged only</button>
+    <button class="reset-btn" id="resetBtn">Reset progress</button>
+  </div>
+
+  <div id="categories"></div>
+
+  <footer id="loadStatus">loading saved progress…</footer>
+</div>
+
+<script>
+const DATA = [
+  { cat: "Arrays & Strings", problems: [
+    "Two Sum","3Sum","4Sum","Kadane's Algorithm (Maximum Subarray)","Product of Array Except Self",
+    "Merge Intervals","Insert Interval","Sliding Window Maximum","Longest Substring Without Repeating Characters",
+    "Minimum Window Substring","Trapping Rain Water","Container With Most Water","3Sum Closest",
+    "Longest Repeating Character Replacement","Sort Colors (Dutch National Flag)","Next Permutation",
+    "Spiral Matrix","Rotate Image","Set Matrix Zeroes","Gas Station"
+  ]},
+  { cat: "Hashing", problems: [
+    "Group Anagrams","Longest Consecutive Sequence","Subarray Sum Equals K","Top K Frequent Elements",
+    "Valid Anagram","Isomorphic Strings"
+  ]},
+  { cat: "Binary Search", problems: [
+    "Binary Search","Search in Rotated Sorted Array","Find Minimum in Rotated Sorted Array",
+    "Koko Eating Bananas","Split Array Largest Sum","Median of Two Sorted Arrays",
+    "Capacity to Ship Packages Within D Days"
+  ]},
+  { cat: "Linked List", problems: [
+    "Reverse Linked List","Detect Cycle in Linked List","Merge Two Sorted Lists","Merge K Sorted Lists",
+    "Reorder List","Remove Nth Node From End of List","Copy List with Random Pointer","LRU Cache",
+    "LFU Cache","Add Two Numbers"
+  ]},
+  { cat: "Stacks & Queues", problems: [
+    "Valid Parentheses","Min Stack","Largest Rectangle in Histogram","Daily Temperatures",
+    "Next Greater Element I","Next Greater Element II","Evaluate Reverse Polish Notation",
+    "Implement Queue using Stacks","Implement Stack using Queues"
+  ]},
+  { cat: "Trees", problems: [
+    "Binary Tree Level Order Traversal","Validate Binary Search Tree","Lowest Common Ancestor of a Binary Search Tree",
+    "Lowest Common Ancestor of a Binary Tree","Serialize and Deserialize Binary Tree","Diameter of Binary Tree",
+    "Path Sum II","Binary Tree Maximum Path Sum","Kth Smallest Element in a BST",
+    "Construct Binary Tree from Preorder and Inorder Traversal","Binary Tree Right Side View",
+    "Balanced Binary Tree","Invert Binary Tree","Flatten Binary Tree to Linked List"
+  ]},
+  { cat: "Tries", problems: [
+    "Implement Trie (Prefix Tree)","Word Search II","Design Add and Search Words Data Structure"
+  ]},
+  { cat: "Graphs", problems: [
+    "Number of Islands","Clone Graph","Course Schedule","Course Schedule II","Word Ladder","Word Ladder II",
+    "Pacific Atlantic Water Flow","Rotting Oranges","Graph Valid Tree","Number of Connected Components in an Undirected Graph",
+    "Network Delay Time","Redundant Connection","Number of Provinces","Accounts Merge"
+  ]},
+  { cat: "Backtracking", problems: [
+    "Subsets","Subsets II","Permutations","Permutations II","Combinations","Combination Sum","Combination Sum II",
+    "N-Queens","Word Search","Palindrome Partitioning","Sudoku Solver","Generate Parentheses"
+  ]},
+  { cat: "Dynamic Programming", problems: [
+    "Climbing Stairs","House Robber","House Robber II","Coin Change","Coin Change II",
+    "Longest Increasing Subsequence","Longest Common Subsequence","Edit Distance",
+    "Partition Equal Subset Sum","Target Sum","Word Break","Unique Paths","Unique Paths II","Decode Ways",
+    "Best Time to Buy and Sell Stock","Best Time to Buy and Sell Stock II","Best Time to Buy and Sell Stock III",
+    "Best Time to Buy and Sell Stock IV","Best Time to Buy and Sell Stock with Cooldown",
+    "Maximum Product Subarray","Longest Palindromic Substring","Palindromic Substrings",
+    "Interleaving String","Burst Balloons","Regular Expression Matching"
+  ]},
+  { cat: "Heaps", problems: [
+    "Merge K Sorted Lists","Top K Frequent Elements","Find Median from Data Stream",
+    "Kth Largest Element in an Array","Task Scheduler","Design Twitter"
+  ]},
+  { cat: "Bit Manipulation", problems: [
+    "Single Number","Single Number II","Counting Bits","Number of 1 Bits","Reverse Bits",
+    "Sum of Two Integers"
+  ]},
+  { cat: "Design Problems", problems: [
+    "LRU Cache","LFU Cache","Design Twitter","Design Hit Counter","Design Circular Queue"
+  ]},
+  { cat: "Greedy", problems: [
+    "Jump Game","Jump Game II","Gas Station","Merge Intervals","Non-overlapping Intervals","Partition Labels"
+  ]}
+];
+
+const DESCRIPTIONS = {
+  // Arrays & Strings
+  "Two Sum": "Find two numbers in an array that add up to a target sum.",
+  "3Sum": "Find all unique triplets in the array that sum to zero.",
+  "4Sum": "Find all unique quadruplets in the array that sum to a target.",
+  "Kadane's Algorithm (Maximum Subarray)": "Find the contiguous subarray with the largest sum.",
+  "Product of Array Except Self": "Return an array where each element is the product of all others, without using division.",
+  "Merge Intervals": "Merge all overlapping intervals into a set of non-overlapping ones.",
+  "Insert Interval": "Insert a new interval into a sorted list of intervals, merging as needed.",
+  "Sliding Window Maximum": "Find the maximum value in every sliding window of size k.",
+  "Longest Substring Without Repeating Characters": "Find the length of the longest substring with no repeated characters.",
+  "Minimum Window Substring": "Find the smallest substring of one string containing all characters of another.",
+  "Trapping Rain Water": "Compute how much water can be trapped between bars after it rains.",
+  "Container With Most Water": "Find two lines that, with the x-axis, form the container holding the most water.",
+  "3Sum Closest": "Find the triplet whose sum is closest to a given target.",
+  "Longest Repeating Character Replacement": "Find the longest substring of one repeated letter after at most k replacements.",
+  "Sort Colors (Dutch National Flag)": "Sort an array of 0s, 1s, and 2s in-place in a single pass.",
+  "Next Permutation": "Rearrange numbers into the next lexicographically greater permutation.",
+  "Spiral Matrix": "Return all elements of a matrix traversed in spiral order.",
+  "Rotate Image": "Rotate an n x n matrix 90 degrees clockwise, in-place.",
+  "Set Matrix Zeroes": "If an element is 0, set its entire row and column to 0, in-place.",
+  "Gas Station": "Find the starting gas station that lets you complete a circular route.",
+
+  // Hashing
+  "Group Anagrams": "Group strings that are anagrams of each other.",
+  "Longest Consecutive Sequence": "Find the length of the longest run of consecutive integers.",
+  "Subarray Sum Equals K": "Count the number of subarrays whose sum equals k.",
+  "Top K Frequent Elements": "Return the k most frequently occurring elements in an array.",
+  "Valid Anagram": "Check whether two strings are anagrams of each other.",
+  "Isomorphic Strings": "Check if characters in one string can be consistently mapped to another string.",
+
+  // Binary Search
+  "Binary Search": "Find the index of a target value in a sorted array.",
+  "Search in Rotated Sorted Array": "Find a target in a sorted array that has been rotated at an unknown pivot.",
+  "Find Minimum in Rotated Sorted Array": "Find the minimum element in a rotated sorted array.",
+  "Koko Eating Bananas": "Find the minimum eating speed needed to finish all bananas within h hours.",
+  "Split Array Largest Sum": "Split an array into m parts to minimize the largest subarray sum.",
+  "Median of Two Sorted Arrays": "Find the median of two sorted arrays in logarithmic time.",
+  "Capacity to Ship Packages Within D Days": "Find the minimum ship capacity needed to deliver all packages within D days.",
+
+  // Linked List
+  "Reverse Linked List": "Reverse a singly linked list.",
+  "Detect Cycle in Linked List": "Determine whether a linked list contains a cycle.",
+  "Merge Two Sorted Lists": "Merge two sorted linked lists into a single sorted list.",
+  "Merge K Sorted Lists": "Merge k sorted linked lists into a single sorted list.",
+  "Reorder List": "Reorder a list into the pattern first, last, second, second-last, and so on.",
+  "Remove Nth Node From End of List": "Remove the nth node from the end of a linked list in one pass.",
+  "Copy List with Random Pointer": "Deep-copy a linked list where each node also has a random pointer.",
+  "LRU Cache": "Design a fixed-size cache that evicts the least recently used item.",
+  "LFU Cache": "Design a fixed-size cache that evicts the least frequently used item.",
+  "Add Two Numbers": "Add two numbers represented as linked lists of digits.",
+
+  // Stacks & Queues
+  "Valid Parentheses": "Check whether a string of brackets is validly matched and nested.",
+  "Min Stack": "Design a stack that supports retrieving the minimum element in O(1).",
+  "Largest Rectangle in Histogram": "Find the area of the largest rectangle that fits within a histogram.",
+  "Daily Temperatures": "For each day, find how many days until a warmer temperature.",
+  "Next Greater Element I": "Find the next greater element for each item of one array within another.",
+  "Next Greater Element II": "Find the next greater element for each item in a circular array.",
+  "Evaluate Reverse Polish Notation": "Evaluate an arithmetic expression written in postfix notation.",
+  "Implement Queue using Stacks": "Build a queue's behavior using only two stacks.",
+  "Implement Stack using Queues": "Build a stack's behavior using only queues.",
+
+  // Trees
+  "Binary Tree Level Order Traversal": "Traverse a binary tree level by level, left to right.",
+  "Validate Binary Search Tree": "Check whether a binary tree satisfies the BST ordering property.",
+  "Lowest Common Ancestor of a Binary Search Tree": "Find the lowest common ancestor of two nodes in a BST.",
+  "Lowest Common Ancestor of a Binary Tree": "Find the lowest common ancestor of two nodes in a general binary tree.",
+  "Serialize and Deserialize Binary Tree": "Convert a binary tree to a string, and rebuild it back from that string.",
+  "Diameter of Binary Tree": "Find the length of the longest path between any two nodes in a tree.",
+  "Path Sum II": "Find all root-to-leaf paths where node values add up to a target sum.",
+  "Binary Tree Maximum Path Sum": "Find the maximum sum along any path between two nodes in a tree.",
+  "Kth Smallest Element in a BST": "Find the kth smallest value stored in a binary search tree.",
+  "Construct Binary Tree from Preorder and Inorder Traversal": "Rebuild a binary tree given its preorder and inorder traversals.",
+  "Binary Tree Right Side View": "Return the values visible when viewing the tree from the right side.",
+  "Balanced Binary Tree": "Check whether a binary tree is height-balanced.",
+  "Invert Binary Tree": "Flip a binary tree into its mirror image.",
+  "Flatten Binary Tree to Linked List": "Flatten a binary tree in-place into a linked list following preorder.",
+
+  // Tries
+  "Implement Trie (Prefix Tree)": "Build a trie that supports insert, search, and prefix search.",
+  "Word Search II": "Find all words from a given list that appear in a grid of letters.",
+  "Design Add and Search Words Data Structure": "Design a structure supporting word search with wildcard characters.",
+
+  // Graphs
+  "Number of Islands": "Count the number of connected land regions in a grid.",
+  "Clone Graph": "Create a deep copy of a connected undirected graph.",
+  "Course Schedule": "Determine whether all courses can be finished given prerequisite pairs.",
+  "Course Schedule II": "Return a valid order to finish all courses given prerequisite pairs.",
+  "Word Ladder": "Find the shortest transformation sequence from one word to another, one letter at a time.",
+  "Word Ladder II": "Find all shortest transformation sequences between two words.",
+  "Pacific Atlantic Water Flow": "Find cells from which water can flow to both the Pacific and Atlantic oceans.",
+  "Rotting Oranges": "Find the minimum time for all fresh oranges to rot given adjacent rotten ones.",
+  "Graph Valid Tree": "Check whether a given graph forms a valid tree.",
+  "Number of Connected Components in an Undirected Graph": "Count the number of connected components in a graph.",
+  "Network Delay Time": "Find the time for a signal to reach every node from a source, using shortest paths.",
+  "Redundant Connection": "Find the extra edge that, if removed, turns a graph back into a tree.",
+  "Number of Provinces": "Count the number of groups of directly or indirectly connected cities.",
+  "Accounts Merge": "Merge accounts that share at least one common email address.",
+
+  // Backtracking
+  "Subsets": "Return all possible subsets of a set of distinct numbers.",
+  "Subsets II": "Return all possible subsets of a set that may contain duplicates.",
+  "Permutations": "Return all possible permutations of an array.",
+  "Permutations II": "Return all unique permutations of an array that may contain duplicates.",
+  "Combinations": "Return all possible combinations of k numbers chosen from 1 to n.",
+  "Combination Sum": "Find all combinations of numbers that sum to a target, reusing numbers freely.",
+  "Combination Sum II": "Find all unique combinations summing to a target, each number used once.",
+  "N-Queens": "Place n queens on an n x n board so that none attack each other.",
+  "Word Search": "Check whether a word can be formed by moving between adjacent cells in a grid.",
+  "Palindrome Partitioning": "Partition a string so that every resulting substring is a palindrome.",
+  "Sudoku Solver": "Fill a 9x9 Sudoku board so it satisfies all the puzzle's rules.",
+  "Generate Parentheses": "Generate all combinations of well-formed parentheses for n pairs.",
+
+  // Dynamic Programming
+  "Climbing Stairs": "Count the number of ways to climb n stairs taking 1 or 2 steps at a time.",
+  "House Robber": "Maximize money robbed from houses without robbing two adjacent ones.",
+  "House Robber II": "Same as House Robber, but the houses are arranged in a circle.",
+  "Coin Change": "Find the fewest coins needed to make up a given amount.",
+  "Coin Change II": "Count the number of ways to make up an amount using a given set of coins.",
+  "Longest Increasing Subsequence": "Find the length of the longest strictly increasing subsequence.",
+  "Longest Common Subsequence": "Find the length of the longest subsequence common to two strings.",
+  "Edit Distance": "Find the minimum number of operations to convert one string into another.",
+  "Partition Equal Subset Sum": "Check whether an array can be split into two subsets with equal sum.",
+  "Target Sum": "Count the ways to assign + or - signs to numbers so they sum to a target.",
+  "Word Break": "Check whether a string can be segmented into words from a dictionary.",
+  "Unique Paths": "Count the number of unique paths from the top-left to bottom-right of a grid.",
+  "Unique Paths II": "Same as Unique Paths, but the grid contains obstacles.",
+  "Decode Ways": "Count the number of ways a digit string can be decoded into letters.",
+  "Best Time to Buy and Sell Stock": "Maximize profit from a single buy and a single sell.",
+  "Best Time to Buy and Sell Stock II": "Maximize profit allowing as many buy/sell transactions as you like.",
+  "Best Time to Buy and Sell Stock III": "Maximize profit using at most two transactions.",
+  "Best Time to Buy and Sell Stock IV": "Maximize profit using at most k transactions.",
+  "Best Time to Buy and Sell Stock with Cooldown": "Maximize profit with a mandatory cooldown day after selling.",
+  "Maximum Product Subarray": "Find the contiguous subarray with the largest product.",
+  "Longest Palindromic Substring": "Find the longest substring of a string that reads the same forwards and backwards.",
+  "Palindromic Substrings": "Count how many substrings of a string are palindromes.",
+  "Interleaving String": "Check whether a string can be formed by interleaving two other strings.",
+  "Burst Balloons": "Maximize the coins collected by bursting balloons in the best possible order.",
+  "Regular Expression Matching": "Implement regular expression matching supporting '.' and '*'.",
+
+  // Heaps
+  "Find Median from Data Stream": "Design a structure that returns the median as numbers are continuously added.",
+  "Kth Largest Element in an Array": "Find the kth largest element in an unsorted array.",
+  "Task Scheduler": "Find the minimum time to finish all tasks with a cooldown between repeats of the same task.",
+  "Design Twitter": "Design a simplified Twitter supporting post, follow, unfollow, and news feed.",
+
+  // Bit Manipulation
+  "Single Number": "Find the number that appears once while every other number appears twice.",
+  "Single Number II": "Find the number that appears once while every other number appears three times.",
+  "Counting Bits": "Count the number of set bits for every number from 0 to n.",
+  "Number of 1 Bits": "Count the number of set bits (1s) in an integer.",
+  "Reverse Bits": "Reverse the bits of a 32-bit unsigned integer.",
+  "Sum of Two Integers": "Add two integers without using the + or - operators.",
+
+  // Design Problems
+  "Design Hit Counter": "Design a counter that reports how many hits occurred in the past 5 minutes.",
+  "Design Circular Queue": "Design a fixed-size circular queue supporting enqueue and dequeue.",
+
+  // Greedy
+  "Jump Game": "Determine whether you can reach the last index by jumping forward.",
+  "Jump Game II": "Find the minimum number of jumps needed to reach the last index.",
+  "Non-overlapping Intervals": "Find the minimum number of intervals to remove so the rest don't overlap.",
+  "Partition Labels": "Partition a string into as many parts as possible so each letter appears in only one part."
+};
+
+function getDescription(name){
+  return DESCRIPTIONS[name] || "";
+}
+
+
+const STORAGE_KEY = "dsa-cheatsheet-progress";
+let solved = {};
+let flagged = {};
+let showFlaggedOnly = false;
+let streak = { current: 0, longest: 0, lastActiveDate: null };
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function daysBetween(a, b){
+  const d1 = new Date(a + 'T00:00:00');
+  const d2 = new Date(b + 'T00:00:00');
+  return Math.round((d2 - d1) / 86400000);
+}
+
+function registerActivityToday(){
+  const today = todayStr();
+  if(streak.lastActiveDate === today) return; // already counted today
+  if(streak.lastActiveDate){
+    const gap = daysBetween(streak.lastActiveDate, today);
+    if(gap === 1){
+      streak.current += 1;
+    }else{
+      streak.current = 1;
+    }
+  }else{
+    streak.current = 1;
+  }
+  streak.lastActiveDate = today;
+  streak.longest = Math.max(streak.longest, streak.current);
+}
+
+const MOTIVATION_QUOTES = [
+  "Small daily reps beat occasional marathons. One problem today counts.",
+  "You don't need to feel motivated to start — starting is what creates motivation.",
+  "Consistency compounds. A streak of 1 is better than a streak of 0.",
+  "The bar for today is low on purpose: just show up and solve one.",
+  "Hiring cycles reward whoever kept showing up, not whoever felt like it most.",
+  "Progress hides in boring, repeated days. This is one of them.",
+  "You already came back once after a break — that's the hard part.",
+  "Don't break the chain. One problem is enough to keep it alive.",
+  "Future-you is being built by what you do in the next 10 minutes.",
+  "It's fine to feel lazy. Solve one problem anyway, then decide if you want to stop.",
+  "Nobody feels like grinding DSA every day. They just do it on the days they don't feel like it too.",
+  "One ugly solution today beats one perfect solution you never wrote.",
+  "The version of you that gets hired is built on days exactly like this one.",
+  "Motivation is a mood. Discipline is a decision you already made.",
+  "You're not behind. You're back. That's a different thing entirely.",
+  "Every problem you avoid today is still there tomorrow, plus interest.",
+  "Interviewers can't tell how you felt while practicing — only what you can solve.",
+  "Do it badly today so you can do it well next month.",
+  "The goal isn't to feel ready. It's to become ready by showing up anyway.",
+  "A rough patch of code beaten today is better than a clean one imagined never.",
+  "You don't rise to the level of your goals, you fall to the level of your systems. Today, be the system.",
+  "Nobody's watching. Which means the only person you're letting down by skipping today is future you.",
+  "Ten minutes of effort is infinitely more than zero minutes of intention.",
+  "Cracking SDE1 isn't about talent. It's about who's still solving problems in week 6.",
+  "The streak isn't the goal. It's just proof you kept the promise you made to yourself.",
+  "You don't need a good day to make progress. You just need ten minutes and a keyboard.",
+  "Every 'I'll do it tomorrow' is a loan against a future you that's already tired.",
+  "This problem won't solve itself, but it also won't take as long as your brain is telling you.",
+  "Discomfort now is just tuition for the job later.",
+  "Show up lazy if you have to. Just show up."
+];
+
+function getDailyQuote(){
+  const today = todayStr();
+  let hash = 0;
+  for(let i=0;i<today.length;i++){ hash = (hash * 31 + today.charCodeAt(i)) >>> 0; }
+  return MOTIVATION_QUOTES[hash % MOTIVATION_QUOTES.length];
+}
+
+function leetcodeSearchUrl(name){
+  return "https://leetcode.com/search/?q=" + encodeURIComponent(name);
+}
+
+function slugify(cat){
+  return cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+}
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, false);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      // support both old format (flat solved map) and new format ({solved, flagged, streak})
+      if(parsed && (parsed.solved || parsed.flagged || parsed.streak)){
+        solved = parsed.solved || {};
+        flagged = parsed.flagged || {};
+        streak = parsed.streak || { current: 0, longest: 0, lastActiveDate: null };
+      } else {
+        solved = parsed || {};
+        flagged = {};
+      }
+    }
+  }catch(e){
+    solved = {};
+    flagged = {};
+  }
+}
+
+let saveTimer = null;
+let saveInFlight = false;
+let pendingSave = false;
+
+function scheduleSave(){
+  setStatus("saving…");
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { doSave(); }, 500);
+}
+
+async function doSave(attempt = 1){
+  if(saveInFlight){
+    pendingSave = true;
+    return;
+  }
+  saveInFlight = true;
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }), false);
+    setStatus("saved ✓");
+  }catch(e){
+    console.error("save failed", e);
+    if(attempt < 3){
+      setTimeout(() => doSave(attempt + 1), 800 * attempt);
+      setStatus("retrying save…");
+    }else{
+      setStatus("couldn't save — check your connection and try again");
+    }
+  }finally{
+    saveInFlight = false;
+    if(pendingSave){
+      pendingSave = false;
+      doSave();
+    }
+  }
+}
+
+function setStatus(msg){
+  const el = document.getElementById('loadStatus');
+  if(el) el.textContent = msg;
+}
+
+// kept for compatibility with existing call sites; now just schedules a debounced save
+async function saveProgress(){
+  scheduleSave();
+}
+
+function renderStreak(){
+  const today = todayStr();
+  const activeToday = streak.lastActiveDate === today;
+  document.getElementById('streakCurrent').textContent = streak.current;
+  document.getElementById('streakLongest').textContent = streak.longest;
+  document.getElementById('streakQuote').textContent = getDailyQuote();
+
+  const nudge = document.getElementById('streakNudge');
+  if(streak.current === 0){
+    nudge.textContent = "Solve one problem today to start your streak.";
+  } else if(activeToday){
+    nudge.textContent = "Today's logged. Streak is safe — nice work.";
+  } else {
+    nudge.textContent = "You haven't solved anything today yet — don't lose your streak.";
+  }
+}
+
+function totalProblems(){
+  return DATA.reduce((sum, c) => sum + c.problems.length, 0);
+}
+
+function doneProblems(){
+  return Object.values(solved).filter(Boolean).length;
+}
+
+function flaggedProblems(){
+  return Object.values(flagged).filter(Boolean).length;
+}
+
+function renderProgress(){
+  const total = totalProblems();
+  const done = doneProblems();
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('flagCount').textContent = flaggedProblems();
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('pctText').textContent = pct + "%";
+
+  const track = document.getElementById('barTrack');
+  const blocks = 40;
+  const filled = Math.round((pct/100)*blocks);
+  track.innerHTML = "";
+  for(let i=0;i<blocks;i++){
+    const b = document.createElement('div');
+    b.className = 'bar-block' + (i < filled ? ' filled' : '');
+    track.appendChild(b);
+  }
+}
+
+function renderCategories(){
+  const container = document.getElementById('categories');
+  container.innerHTML = "";
+  DATA.forEach((cat, ci) => {
+    const catId = slugify(cat.cat);
+    const wrapDiv = document.createElement('div');
+    wrapDiv.className = 'category';
+    wrapDiv.dataset.catId = catId;
+
+    const catDone = cat.problems.filter(p => solved[catId+'::'+p]).length;
+
+    wrapDiv.innerHTML = `
+      <div class="cat-head">
+        <div class="cat-title">
+          <span class="cat-index">${String(ci+1).padStart(2,'0')}</span>
+          <span class="cat-name">${cat.cat}</span>
+        </div>
+        <div class="cat-meta">
+          <span class="cat-progress">${catDone}/${cat.problems.length}</span>
+          <span class="chevron">&#9656;</span>
+        </div>
+      </div>
+      <div class="cat-body"></div>
+    `;
+
+    const body = wrapDiv.querySelector('.cat-body');
+    cat.problems.forEach(p => {
+      const key = catId + '::' + p;
+      const isDone = !!solved[key];
+      const isFlagged = !!flagged[key];
+      const desc = getDescription(p);
+      const row = document.createElement('div');
+      row.className = 'problem-row' + (isFlagged ? ' flagged' : '');
+      row.dataset.search = (p + ' ' + desc).toLowerCase();
+      row.dataset.key = key;
+      row.innerHTML = `
+        <div class="check ${isDone ? 'done' : ''}" data-key="${key}"></div>
+        <div class="p-content">
+          <a class="p-name ${isDone ? 'done' : ''}" href="${leetcodeSearchUrl(p)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit;">${p}</a>
+          ${desc ? `<div class="p-desc ${isDone ? 'done' : ''}">${desc}</div>` : ''}
+        </div>
+        <div class="flag-btn ${isFlagged ? 'flagged' : ''}" data-key="${key}" title="Flag as couldn't solve / needs review">🚩 ${isFlagged ? 'Flagged' : 'Flag'}</div>
+        <span class="open-icon">&#8599;</span>
+      `;
+      body.appendChild(row);
+    });
+
+    wrapDiv.querySelector('.cat-head').addEventListener('click', () => {
+      wrapDiv.classList.toggle('open');
+    });
+
+    container.appendChild(wrapDiv);
+  });
+
+  // checkbox handlers
+  container.querySelectorAll('.check').forEach(chk => {
+    chk.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const key = chk.dataset.key;
+      solved[key] = !solved[key];
+      chk.classList.toggle('done');
+      const row = chk.closest('.problem-row');
+      const nameEl = row.querySelector('.p-name');
+      const descEl = row.querySelector('.p-desc');
+      if(nameEl) nameEl.classList.toggle('done');
+      if(descEl) descEl.classList.toggle('done');
+      if(solved[key]){
+        registerActivityToday();
+        renderStreak();
+      }
+      renderProgress();
+      updateCategoryCounts();
+      await saveProgress();
+    });
+  });
+
+  // flag button handlers
+  container.querySelectorAll('.flag-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const key = btn.dataset.key;
+      flagged[key] = !flagged[key];
+      btn.classList.toggle('flagged');
+      btn.textContent = flagged[key] ? '🚩 Flagged' : '🚩 Flag';
+      const row = btn.closest('.problem-row');
+      row.classList.toggle('flagged');
+      if(showFlaggedOnly) applyFilters();
+      renderProgress();
+      await saveProgress();
+    });
+  });
+}
+
+function updateCategoryCounts(){
+  document.querySelectorAll('.category').forEach(catEl => {
+    const catId = catEl.dataset.catId;
+    const cat = DATA.find(c => slugify(c.cat) === catId);
+    const done = cat.problems.filter(p => solved[catId+'::'+p]).length;
+    catEl.querySelector('.cat-progress').textContent = `${done}/${cat.problems.length}`;
+  });
+}
+
+function applyFilters(){
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  document.querySelectorAll('.category').forEach(catEl => {
+    let anyVisible = false;
+    catEl.querySelectorAll('.problem-row').forEach(row => {
+      const key = row.dataset.key;
+      const matchesSearch = row.dataset.search.includes(q);
+      const matchesFlag = !showFlaggedOnly || !!flagged[key];
+      const visible = matchesSearch && matchesFlag;
+      row.classList.toggle('hidden', !visible);
+      if(visible) anyVisible = true;
+    });
+    const anyFilterActive = q.length > 0 || showFlaggedOnly;
+    catEl.classList.toggle('hidden', !anyVisible && anyFilterActive);
+    if(anyFilterActive && anyVisible){
+      catEl.classList.add('open');
+    }
+  });
+}
+
+document.getElementById('search').addEventListener('input', applyFilters);
+
+document.getElementById('flaggedFilterBtn').addEventListener('click', () => {
+  showFlaggedOnly = !showFlaggedOnly;
+  document.getElementById('flaggedFilterBtn').classList.toggle('active', showFlaggedOnly);
+  applyFilters();
+});
+
+document.getElementById('resetBtn').addEventListener('click', async () => {
+  if(confirm("Reset all progress? This can't be undone.")){
+    solved = {};
+    flagged = {};
+    streak = { current: 0, longest: 0, lastActiveDate: null };
+    await saveProgress();
+    renderProgress();
+    renderStreak();
+    renderCategories();
+    applyFilters();
+  }
+});
+
+(async function init(){
+  await loadProgress();
+  renderProgress();
+  renderStreak();
+  renderCategories();
+  document.getElementById('loadStatus').textContent = "progress saved locally to this artifact — check back anytime";
+})();
+</script>
+</body>
+</html>
