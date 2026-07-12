@@ -125,6 +125,43 @@
     padding-top: 8px;
   }
 
+  .daily-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .daily-head{
+    font-weight: 600; font-size: 14px; margin-bottom: 10px;
+  }
+  .daily-list{
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .daily-row{
+    display:flex; align-items:center; justify-content: space-between;
+    font-size: 13px;
+  }
+  .daily-date{ color: var(--text); font-family: var(--font-mono); }
+  .daily-date.today{ color: var(--focus); font-weight: 600; }
+  .daily-count-track{
+    display:flex; align-items:center; gap: 8px; flex: 1; margin: 0 12px;
+  }
+  .daily-bar{
+    height: 6px; border-radius: 3px; background: var(--focus);
+    flex-shrink: 0;
+  }
+  .daily-bar-track{
+    flex: 1; height: 6px; background: var(--surface-hi); border-radius: 3px; overflow:hidden;
+  }
+  .daily-count{
+    font-family: var(--font-mono); font-weight: 600; color: var(--focus); font-size: 13px;
+    min-width: 18px; text-align: right;
+  }
+  .daily-empty{ color: var(--muted); font-size: 12.5px; font-style: italic; }
+
   .controls{
     display:flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap;
   }
@@ -239,6 +276,41 @@
   .flag-btn:hover{ border-color: var(--warn); color: var(--warn); }
   .flag-btn.flagged{ background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
 
+  .remark-btn{
+    display:flex; align-items:center; gap: 5px;
+    flex-shrink:0;
+    cursor:pointer;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 5px 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .remark-btn:hover{ border-color: var(--focus); color: var(--focus); }
+  .remark-btn.has-remark{ background: var(--focus-soft); border-color: var(--focus); color: var(--focus); }
+
+  .remark-box{
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--text);
+    resize: vertical;
+    min-height: 46px;
+  }
+  .remark-box.open{ display: block; }
+  .remark-box:focus{ border-color: var(--focus); outline: none; }
+  .remark-box.has-text:not(.open){ display: block; opacity: 0.85; }
+
   .p-content{ flex: 1; min-width: 0; }
   .p-name{
     font-size: 14px;
@@ -286,6 +358,70 @@
 
   .hidden{ display:none !important; }
 
+  .doc-link-card{
+    display:flex; align-items:center; justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .doc-link-card:hover{ background: var(--focus-soft); }
+  .doc-link-title{ font-weight: 600; font-size: 14px; }
+  .doc-link-sub{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .doc-link-arrow{
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    color: var(--warn); white-space: nowrap; margin-left: 14px;
+  }
+
+  .modal-overlay{
+    position: fixed; inset: 0;
+    background: rgba(38,36,32,0.55);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding: 40px 16px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .modal-panel{
+    background: var(--surface);
+    border-radius: 8px;
+    max-width: 700px;
+    width: 100%;
+    padding: 32px 34px 40px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .modal-close{
+    position: sticky; top: 0; float: right;
+    background: var(--surface-hi);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    width: 32px; height: 32px;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--text);
+  }
+  .modal-close:hover{ border-color: var(--warn); color: var(--warn); }
+  .doc-body h1{
+    font-family: var(--font-display); font-size: 24px; font-weight:700;
+    margin-bottom: 10px; clear: both;
+  }
+  .doc-body h2{
+    font-family: var(--font-display); font-size: 17px; font-weight:700;
+    margin-top: 26px; margin-bottom: 8px; color: var(--focus);
+  }
+  .doc-body p{ font-size: 13.5px; margin-bottom: 10px; color: var(--text); }
+  .doc-body hr{ border:none; border-top: 1px solid var(--line); margin: 18px 0; }
+  .doc-body strong{ font-weight: 600; }
+  .doc-body em{ font-style: italic; color: var(--muted); }
+  .doc-body code{
+    background: var(--surface-hi); border-radius: 3px; padding: 1px 5px;
+    font-family: var(--font-mono); font-size: 12.5px;
+  }
+
   footer{
     text-align:center;
     color: var(--muted);
@@ -303,6 +439,21 @@
     <h1>DSA Cheat Sheet — By Pattern</h1>
     <div class="sub">Same problem set as the topic-wise sheet, regrouped into the ~14+ classic interview patterns (Two Pointers, Sliding Window, Modified Binary Search, etc.) so you can drill one technique at a time. Click a problem to open it on LeetCode. Progress is saved separately from the topic-wise version.</div>
   </header>
+
+  <div class="doc-link-card" id="docLinkCard">
+    <div>
+      <div class="doc-link-title">📖 DSA Pattern Notes</div>
+      <div class="doc-link-sub">Click to open the full reading guide — no problems, just the concepts.</div>
+    </div>
+    <div class="doc-link-arrow">Open →</div>
+  </div>
+
+  <div class="modal-overlay hidden" id="docModal">
+    <div class="modal-panel">
+      <button class="modal-close" id="docModalClose">✕</button>
+      <div class="doc-body" id="docBody"></div>
+    </div>
+  </div>
 
   <div class="progress-card">
     <div class="progress-top">
@@ -329,6 +480,11 @@
     </div>
     <div class="streak-nudge" id="streakNudge">Solve one problem today to start your streak.</div>
     <div class="streak-quote" id="streakQuote"></div>
+  </div>
+
+  <div class="daily-card">
+    <div class="daily-head">📅 Daily Progress</div>
+    <div class="daily-list" id="dailyList"></div>
   </div>
 
   <div class="controls">
@@ -438,6 +594,314 @@ const DATA = [
     "LRU Cache","LFU Cache","Design Hit Counter","Design Circular Queue"
   ]}
 ];
+
+const FULL_DOC_MD = String.raw`# DSA Pattern Notes — Reading Mode
+
+No problems here, just the ideas. Read this on days you're too tired to code but still want to keep the streak of *thinking about this stuff* alive. Each pattern covers: what it is, the signal that tells you to reach for it, how it actually works, and its typical complexity.
+
+---
+
+## Two Pointers
+
+**What it is:** Two indices moving through a structure (usually a sorted array or string) instead of nested loops.
+
+**Signal:** "Find a pair/triplet that sums to X," "reverse in place," "remove duplicates in place," anything on a *sorted* array where a brute force would be O(n^2).
+
+**How it works:** One pointer starts at the left, one at the right (or both from the left at different speeds). Based on a comparison, you move one or both pointers inward. Because the array is sorted, moving a pointer past a value means you've ruled out every combination involving it — that's the insight that collapses O(n^2) into O(n).
+
+**Complexity:** Usually O(n) time, O(1) space.
+
+---
+
+## Sliding Window
+
+**What it is:** A window (subarray/substring) that expands and shrinks over a sequence, instead of recomputing from scratch for every start index.
+
+**Signal:** "Longest/shortest substring/subarray with property X," "maximum sum of k consecutive elements."
+
+**How it works:** Grow the window from the right by pulling in new elements. When the window violates some condition (too many distinct chars, sum too big), shrink from the left until it's valid again. You never restart — the window only ever moves forward, which is what keeps it linear.
+
+**Complexity:** O(n) time, since each pointer only moves forward, not O(n·k).
+
+---
+
+## Fast & Slow Pointers (Tortoise and Hare)
+
+**What it is:** Two pointers moving through a linked structure at different speeds.
+
+**Signal:** Cycle detection, finding the middle of a linked list, "nth from the end."
+
+**How it works:** The fast pointer moves 2 steps for every 1 step of the slow pointer. If there's a cycle, fast eventually laps slow and they meet — no cycle means fast just hits the end first. For "find the middle," when fast reaches the end, slow is naturally at the midpoint.
+
+**Complexity:** O(n) time, O(1) space — the whole point is avoiding a hash set to track visited nodes.
+
+---
+
+## Merge Intervals
+
+**What it is:** A family of problems about overlapping ranges.
+
+**Signal:** Anything involving intervals, ranges, or scheduling — "merge overlapping," "insert a new interval," "minimum rooms needed."
+
+**How it works:** Sort intervals by start time first — this is the non-obvious but essential step. Once sorted, you only ever need to compare each interval to the *last one you kept*, because anything overlapping got merged already. No interval can suddenly overlap something further back.
+
+**Complexity:** O(n log n) — dominated by the sort.
+
+---
+
+## In-place Linked List Reversal & Merge
+
+**What it is:** Rewiring `+"`"+`next`+"`"+` pointers instead of building a new list.
+
+**Signal:** "Reverse a linked list (or part of it)," "merge two sorted lists," "add two numbers as linked lists."
+
+**How it works:** Keep three pointers — previous, current, next — and walk through the list flipping each `+"`"+`next`+"`"+` pointer to point backward before moving on. For merging, you're just repeatedly picking the smaller head node and stitching it onto a result list. The core discipline is: never lose your only reference to the rest of the list before you've rewired the current node.
+
+**Complexity:** O(n) time, O(1) space.
+
+---
+
+## Monotonic Stack
+
+**What it is:** A stack that's kept either increasing or decreasing as you push, popping off anything that breaks the order.
+
+**Signal:** "Next greater/smaller element," "daily temperatures," "largest rectangle in histogram," anything asking about the nearest bigger/smaller thing to the left or right.
+
+**How it works:** As you scan left to right, before pushing a new element, pop everything on the stack that it "beats" (e.g., is greater than). Each popped element just found its answer — the new element *is* its next-greater. What's left on the stack after popping is exactly the elements still waiting for their answer.
+
+**Complexity:** O(n) — looks like nested loops but each element is pushed and popped at most once.
+
+---
+
+## Modified Binary Search
+
+**What it is:** Binary search applied to something that isn't a flat sorted array — a rotated array, or a monotonic *function* of the answer rather than the array itself.
+
+**Signal:** "Sorted array, possibly rotated," or — the bigger tell — "minimize the maximum" / "find the smallest X such that condition holds." That second phrasing means you're binary searching over the *answer space*, not the input array.
+
+**How it works:** You need a way to tell, for a candidate answer, whether it's "too small," "too big," or "just right" — a feasibility check. Binary search then narrows in on the boundary between feasible and infeasible. For rotated arrays, the trick is figuring out which half is still properly sorted and deciding whether the target could be in it.
+
+**Complexity:** O(log n) for the array case; O(n log(range)) when binary searching over an answer space, since each check often costs O(n).
+
+---
+
+## Top K Elements (Heap)
+
+**What it is:** Maintaining the k best (or worst) elements seen so far without sorting everything.
+
+**Signal:** "Kth largest," "top k frequent," "k closest points."
+
+**How it works:** Keep a heap of size k. For "top k largest," use a *min*-heap — counterintuitive, but it means the smallest of your current top-k sits at the top, ready to be evicted the moment something bigger shows up. Anything that doesn't beat the heap's top gets ignored outright.
+
+**Complexity:** O(n log k) — much better than sorting everything (O(n log n)) when k is small.
+
+---
+
+## K-way Merge
+
+**What it is:** Merging many sorted sequences into one, generalizing the two-list merge.
+
+**Signal:** "Merge k sorted lists/arrays," "smallest range covering elements from k lists."
+
+**How it works:** Put the current head of each list into a min-heap. Repeatedly pop the smallest, append it to the result, and push in whatever comes next from that same list. The heap always tells you which of the k "next candidates" is globally smallest without comparing all k every time.
+
+**Complexity:** O(n log k) where n is total elements and k is number of lists.
+
+---
+
+## Two Heaps
+
+**What it is:** Splitting a data stream into two halves via a max-heap for the lower half and a min-heap for the upper half.
+
+**Signal:** "Median of a running stream," "find median from data stream."
+
+**How it works:** Every new number goes into one of the two heaps based on comparison to the current median, then you rebalance so the heaps never differ in size by more than one. The median is then just the top of one heap, or the average of both tops — no need to re-sort anything each time a number arrives.
+
+**Complexity:** O(log n) per insertion, O(1) to fetch the median.
+
+---
+
+## Tree / Graph BFS
+
+**What it is:** Level-by-level exploration using a queue.
+
+**Signal:** "Shortest path in an unweighted graph," "level order traversal," "minimum steps/transformations," grid problems asking for "minimum time until everything is reached."
+
+**How it works:** Push the starting node(s), then repeatedly pop from the front and push its unvisited neighbors. Because you always explore everything at distance d before anything at distance d+1, the first time you reach a target, you've found the *shortest* path to it — that guarantee is BFS's whole reason for existing.
+
+**Complexity:** O(V + E).
+
+---
+
+## Tree DFS
+
+**What it is:** Recursive (or stack-based) exploration that dives deep before backtracking.
+
+**Signal:** Almost anything phrased in terms of a binary tree's structure — ancestors, paths, balance, diameter, construction/serialization.
+
+**How it works:** Most tree problems come down to: "what do I need to know about my left subtree, and what do I need to know about my right subtree, to answer this for myself?" That's the recursive contract. Diameter needs subtree heights; validate-BST needs a valid range passed downward; path-sum needs a running total passed downward. Once you identify what info flows up vs. down, the recursion writes itself.
+
+**Complexity:** O(n) time, O(h) space for the recursion stack, where h is tree height.
+
+---
+
+## Graph Traversal & Shortest Path
+
+**What it is:** DFS/BFS extended to general (not necessarily tree-shaped) graphs, plus weighted shortest-path algorithms.
+
+**Signal:** Grids treated as graphs (islands, flood fill), "clone a graph," or — if edges have weights — "shortest path with costs" (that's Dijkstra territory, using a min-heap of (distance, node)).
+
+**How it works:** Same DFS/BFS mechanics as trees, but you now need a `+"`"+`visited`+"`"+` set since graphs can have cycles trees don't. For weighted shortest paths, Dijkstra greedily expands the closest unvisited node next, which works as long as weights are non-negative.
+
+**Complexity:** O(V + E) for BFS/DFS; O((V + E) log V) for Dijkstra with a heap.
+
+---
+
+## Union Find (Disjoint Set)
+
+**What it is:** A structure that tracks which elements belong to the same group and can merge two groups in near-constant time.
+
+**Signal:** "Are these connected, directly or indirectly," "number of provinces/components," "detect a redundant edge that creates a cycle."
+
+**How it works:** Each element points to a "parent"; following parents up gets you to the group's representative ("find"). To merge two groups ("union"), you point one representative at the other. Two tricks make this fast: path compression (flatten the chain while finding) and union by rank/size (always attach the smaller tree under the bigger one).
+
+**Complexity:** Amortized O(1) per operation (technically O(α(n)), practically constant) with both optimizations.
+
+---
+
+## Topological Sort
+
+**What it is:** Ordering nodes in a directed graph so every edge points forward.
+
+**Signal:** "Course prerequisites," "build order," anything with dependencies that must be resolved before something else can happen.
+
+**How it works:** Kahn's algorithm: repeatedly pick off nodes with zero remaining incoming edges (nothing depends on them being done first), add them to the order, and decrement the in-degree of their neighbors. If you finish without placing every node, there's a cycle — which is also how you detect "impossible to finish" cases like a course requiring itself indirectly.
+
+**Complexity:** O(V + E).
+
+---
+
+## Trie (Prefix Tree)
+
+**What it is:** A tree where each path from the root spells out a prefix, letter by letter.
+
+**Signal:** "Autocomplete," "prefix search," "word search with a dictionary of many words" (searching a whole word list against a grid is a giveaway — build one trie instead of searching for each word separately).
+
+**How it works:** Each node has up to 26 children (one per letter) and a flag marking "a valid word ends here." Inserting and searching just walk down matching letters. The efficiency win over a plain hash set is that a trie can answer "does anything start with this prefix" without scanning every word.
+
+**Complexity:** O(L) per insert/search, where L is word length — independent of how many words are stored.
+
+---
+
+## Subsets / Backtracking
+
+**What it is:** Systematically exploring every choice, undoing a choice when it doesn't pan out, and trying the next one.
+
+**Signal:** "All subsets/permutations/combinations," "N-Queens," "word search in a grid," "generate valid parentheses," "Sudoku solver" — anything asking for *all* valid arrangements rather than just one answer or a count.
+
+**How it works:** Pick a choice, recurse as if it were final, then undo it ("backtrack") and try the next option. The skill is in pruning early — stopping a branch the moment it's clearly invalid instead of exploring it fully. That pruning is usually what separates a working solution from a timeout.
+
+**Complexity:** Exponential in general (that's inherent to enumerating combinatorial possibilities); pruning reduces the practical runtime, not the theoretical worst case.
+
+---
+
+## Dynamic Programming
+
+**What it is:** Breaking a problem into overlapping subproblems and remembering answers so you never recompute them.
+
+**Signal:** The problem asks for an optimum (max/min) or a count, and a greedy or brute-force approach either gives the wrong answer or is exponential because the same subproblem keeps recurring.
+
+**How it works:** Define what a "state" means (e.g., "best profit up to day i," "ways to make amount i using coins so far") and find the recurrence that builds a state from smaller states. Fibonacci-style DP (climbing stairs, house robber) needs just the last couple of states. Knapsack-style (coin change, partition subset sum) iterates amount/capacity. String DP (edit distance, LCS) builds a 2D table across both strings. The recognition skill matters more than memorizing formulas — ask "what's the smallest version of this problem, and how does the answer to a slightly bigger version relate to it?"
+
+**Complexity:** Usually O(n) to O(n·m) depending on how many dimensions the state has; without memoization the same problems are often exponential.
+
+---
+
+## Greedy
+
+**What it is:** Making the locally best choice at each step and trusting it leads to a globally optimal answer.
+
+**Signal:** Interval scheduling, "minimum jumps to reach the end," "gas station" — problems where a proof exists that the locally obvious choice can't be beaten by waiting.
+
+**How it works:** Greedy only works when the problem has a property where an early "good enough" choice never closes off a better later option — this needs to be true, not just assumed, or greedy gives a wrong answer that still looks plausible. When it does hold, you skip DP's overhead entirely and just make one pass.
+
+**Complexity:** Usually O(n) or O(n log n) if a sort is needed first.
+
+---
+
+## Bitwise XOR
+
+**What it is:** Using XOR's self-canceling property (`+"`"+`a ^ a = 0`+"`"+`, `+"`"+`a ^ 0 = a`+"`"+`) to solve problems that look like they need extra memory.
+
+**Signal:** "Find the single number that appears once while others appear twice," "swap without a temp variable," problems about counting set bits.
+
+**How it works:** XOR every element together; pairs cancel to zero, leaving only the odd one out. For counting bits or single-number-appears-thrice variants, you track bit-level state across all numbers instead of full values, which is a smaller trick but the same "clever manipulation of parity" spirit.
+
+**Complexity:** O(n) time, O(1) space — the appeal is entirely about ditching a hash set you'd otherwise need.
+
+---
+
+## Hashing & Prefix Sum
+
+**What it is:** Trading memory for speed — either mapping values to quick lookups (hashing) or precomputing running totals (prefix sum) so range queries become subtraction.
+
+**Signal:** "Anagram grouping," "does a pair/subarray with property X exist" (hashing), or "subarray sum equals k" / any "sum of a range" question (prefix sum).
+
+**How it works:** Hashing: store what you've seen (value → index, or value → count) so a later lookup is O(1) instead of a rescan. Prefix sum: precompute `+"`"+`sum[0..i]`+"`"+` for every i; then `+"`"+`sum[i..j]`+"`"+` is just `+"`"+`sum[j] - sum[i-1]`+"`"+`, turning an O(n) range-sum query into O(1). Combine both — a hashmap of prefix sums — and you get "count subarrays summing to k" in one pass.
+
+**Complexity:** O(n) time, O(n) space for both.
+
+---
+
+## Matrix / Simulation
+
+**What it is:** Problems that ask you to directly simulate a described process on a 2D grid, rather than apply a named algorithm.
+
+**Signal:** "Rotate the matrix," "traverse in spiral order," "set entire row/column to zero" — the description reads like a set of instructions to follow precisely, and the challenge is bookkeeping (boundaries, in-place constraints) rather than algorithmic insight.
+
+**How it works:** Carefully track boundaries (top/bottom/left/right shrinking inward for spiral traversal) or use the matrix's own first row/column as scratch space to avoid extra memory (set matrix zeroes). These problems reward careful index arithmetic more than clever theory.
+
+**Complexity:** O(rows × cols), typically O(1) extra space if done in-place.
+
+---
+
+## Design (Data Structures)
+
+**What it is:** Combining two or more basic structures to get O(1) or near-O(1) behavior for operations that would be slow with just one structure alone.
+
+**Signal:** "Design a cache/counter/queue with property X" — the ask is explicitly for a data structure, not a single computation.
+
+**How it works:** LRU Cache pairs a hashmap (O(1) lookup) with a doubly linked list (O(1) reordering to mark "recently used"). LFU Cache adds a frequency-bucketed structure on top of that idea. Design Circular Queue is really just careful modular index arithmetic over a fixed array. The general move: identify which single operation is the bottleneck for a naive approach, then bolt on exactly the secondary structure that fixes that one weak spot.
+
+**Complexity:** Varies, but the point of these problems is always achieving O(1) (or the best possible) for every required operation.
+
+---
+
+*Read one section a day when you're too tired to grind — recognizing the pattern is most of the battle; the code follows once you know which tool you're reaching for.*`;
+
+function mdToHtml(md){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const inline = s => esc(s)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  const blocks = md.split(/\n\s*\n/);
+  let html = '';
+  blocks.forEach(block => {
+    const trimmed = block.trim();
+    if(!trimmed) return;
+    if(trimmed === '---'){
+      html += '<hr>';
+    } else if(trimmed.startsWith('## ')){
+      html += `<h2>${inline(trimmed.slice(3).trim())}</h2>`;
+    } else if(trimmed.startsWith('# ')){
+      html += `<h1>${inline(trimmed.slice(2).trim())}</h1>`;
+    } else {
+      html += `<p>${inline(trimmed)}</p>`;
+    }
+  });
+  return html;
+}
 
 const DESCRIPTIONS = {
   // Arrays & Strings
@@ -613,6 +1077,8 @@ function getDescription(name){
 const STORAGE_KEY = "dsa-cheatsheet-progress-by-pattern";
 let solved = {};
 let flagged = {};
+let remarks = {};
+let solvedDates = {}; // key -> "YYYY-MM-DD" of the day it was first marked solved
 let showFlaggedOnly = false;
 let streak = { current: 0, longest: 0, lastActiveDate: null };
 
@@ -867,6 +1333,66 @@ function slugify(cat){
 // downloaded HTML file (where window.storage doesn't exist).
 const hasArtifactStorage = (typeof window !== 'undefined') && !!window.storage;
 
+// IndexedDB-backed persistence for the standalone (non-artifact) case — a real
+// browser database instead of just localStorage. localStorage is kept only as
+// a synchronous fallback/mirror for the beforeunload flush, since IndexedDB
+// writes are async and can't be guaranteed to finish before the page closes.
+const IDB_NAME = 'dsaCheatSheetDB';
+const IDB_STORE = 'progress';
+let idbPromise = null;
+
+function openIDB(){
+  if(idbPromise) return idbPromise;
+  idbPromise = new Promise((resolve) => {
+    if(typeof indexedDB === 'undefined'){ resolve(null); return; }
+    try{
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => {
+        if(!req.result.objectStoreNames.contains(IDB_STORE)){
+          req.result.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    }catch(e){
+      resolve(null);
+    }
+  });
+  return idbPromise;
+}
+
+function idbGet(key){
+  return openIDB().then(db => {
+    if(!db) return null;
+    return new Promise((resolve) => {
+      try{
+        const tx = db.transaction(IDB_STORE, 'readonly');
+        const req = tx.objectStore(IDB_STORE).get(key);
+        req.onsuccess = () => resolve(req.result === undefined ? null : req.result);
+        req.onerror = () => resolve(null);
+      }catch(e){
+        resolve(null);
+      }
+    });
+  });
+}
+
+function idbSet(key, value){
+  return openIDB().then(db => {
+    if(!db) return false;
+    return new Promise((resolve) => {
+      try{
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.objectStore(IDB_STORE).put(value, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      }catch(e){
+        resolve(false);
+      }
+    });
+  });
+}
+
 async function storageGet(key){
   if(hasArtifactStorage){
     try{
@@ -875,6 +1401,15 @@ async function storageGet(key){
       return null; // key doesn't exist yet, or a transient error
     }
   }
+  try{
+    const idbVal = await idbGet(key);
+    if(idbVal !== null && idbVal !== undefined){
+      return { key, value: idbVal, shared: false };
+    }
+  }catch(e){
+    // fall through to localStorage
+  }
+  // migration path: older versions of this sheet stored data in localStorage only
   try{
     const raw = localStorage.getItem(key);
     return raw !== null ? { key, value: raw, shared: false } : null;
@@ -887,7 +1422,16 @@ async function storageSet(key, value){
   if(hasArtifactStorage){
     return await window.storage.set(key, value, false);
   }
-  localStorage.setItem(key, value);
+  try{
+    await idbSet(key, value);
+  }catch(e){
+    console.error('IndexedDB save failed, relying on localStorage mirror', e);
+  }
+  try{
+    localStorage.setItem(key, value);
+  }catch(e){
+    // ignore — IndexedDB is the primary store now
+  }
   return { key, value, shared: false };
 }
 
@@ -896,19 +1440,25 @@ async function loadProgress(){
     const res = await storageGet(STORAGE_KEY);
     if(res && res.value){
       const parsed = JSON.parse(res.value);
-      // support both old format (flat solved map) and new format ({solved, flagged, streak})
+      // support both old format (flat solved map) and new format ({solved, flagged, streak, remarks, solvedDates})
       if(parsed && (parsed.solved || parsed.flagged || parsed.streak)){
         solved = parsed.solved || {};
         flagged = parsed.flagged || {};
         streak = parsed.streak || { current: 0, longest: 0, lastActiveDate: null };
+        remarks = parsed.remarks || {};
+        solvedDates = parsed.solvedDates || {};
       } else {
         solved = parsed || {};
         flagged = {};
+        remarks = {};
+        solvedDates = {};
       }
     }
   }catch(e){
     solved = {};
     flagged = {};
+    remarks = {};
+    solvedDates = {};
   }
 }
 
@@ -929,7 +1479,7 @@ async function doSave(attempt = 1){
   }
   saveInFlight = true;
   try{
-    await storageSet(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }));
+    await storageSet(STORAGE_KEY, JSON.stringify({ solved, flagged, streak, remarks, solvedDates }));
     setStatus("saved ✓");
   }catch(e){
     console.error("save failed", e);
@@ -956,7 +1506,7 @@ function flushSaveNow(){
     if(!hasArtifactStorage){
       // localStorage.setItem is synchronous, so this reliably completes
       // even during unload.
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ solved, flagged, streak }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ solved, flagged, streak, remarks, solvedDates }));
     }
   }catch(e){
     console.error("flush save failed", e);
@@ -993,6 +1543,37 @@ function renderStreak(){
   } else {
     nudge.textContent = "You haven't solved anything today yet — don't lose your streak.";
   }
+}
+
+function dailyCounts(){
+  const counts = {};
+  Object.values(solvedDates).forEach(d => {
+    counts[d] = (counts[d] || 0) + 1;
+  });
+  return Object.entries(counts).sort((a,b) => b[0].localeCompare(a[0])); // newest first
+}
+
+function renderDailyLog(){
+  const list = document.getElementById('dailyList');
+  const entries = dailyCounts();
+  if(entries.length === 0){
+    list.innerHTML = '<div class="daily-empty">No problems solved yet — today\'s count will show up here.</div>';
+    return;
+  }
+  const today = todayStr();
+  const maxCount = Math.max(...entries.map(e => e[1]));
+  list.innerHTML = entries.map(([date, count]) => {
+    const pct = Math.round((count / maxCount) * 100);
+    return `
+      <div class="daily-row">
+        <span class="daily-date ${date === today ? 'today' : ''}">${date}${date === today ? ' (today)' : ''}</span>
+        <span class="daily-count-track">
+          <span class="daily-bar-track"><span class="daily-bar" style="width:${pct}%"></span></span>
+        </span>
+        <span class="daily-count">${count}</span>
+      </div>
+    `;
+  }).join('');
 }
 
 function totalProblems(){
@@ -1032,6 +1613,8 @@ function renderCategories(){
   container.innerHTML = "";
   DATA.forEach((cat, ci) => {
     const catId = slugify(cat.cat);
+    const idxLabel = String(ci+1).padStart(2,'0');
+
     const wrapDiv = document.createElement('div');
     wrapDiv.className = 'category';
     wrapDiv.dataset.catId = catId;
@@ -1041,7 +1624,7 @@ function renderCategories(){
     wrapDiv.innerHTML = `
       <div class="cat-head">
         <div class="cat-title">
-          <span class="cat-index">${String(ci+1).padStart(2,'0')}</span>
+          <span class="cat-index">${idxLabel}</span>
           <span class="cat-name">${cat.cat}</span>
         </div>
         <div class="cat-meta">
@@ -1058,17 +1641,20 @@ function renderCategories(){
       const isDone = !!solved[key];
       const isFlagged = !!flagged[key];
       const desc = getDescription(p);
+      const remarkText = remarks[key] || '';
       const row = document.createElement('div');
       row.className = 'problem-row' + (isFlagged ? ' flagged' : '');
-      row.dataset.search = (p + ' ' + desc).toLowerCase();
+      row.dataset.search = (p + ' ' + desc + ' ' + remarkText).toLowerCase();
       row.dataset.key = key;
       row.innerHTML = `
         <div class="check ${isDone ? 'done' : ''}" data-key="${key}"></div>
         <div class="p-content">
           <a class="p-name ${isDone ? 'done' : ''}" href="${leetcodeSearchUrl(p)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit;">${p}</a>
           ${desc ? `<div class="p-desc ${isDone ? 'done' : ''}">${desc}</div>` : ''}
+          <textarea class="remark-box ${remarkText ? 'has-text' : ''}" data-key="${key}" placeholder="Add a remark for yourself (approach, gotcha, revisit later)...">${remarkText}</textarea>
         </div>
         <div class="flag-btn ${isFlagged ? 'flagged' : ''}" data-key="${key}" title="Flag as couldn't solve / needs review">🚩 ${isFlagged ? 'Flagged' : 'Flag'}</div>
+        <div class="remark-btn ${remarkText ? 'has-remark' : ''}" data-key="${key}" title="Add or view remark">📝 ${remarkText ? 'Remark' : 'Note'}</div>
         <span class="open-icon">&#8599;</span>
       `;
       body.appendChild(row);
@@ -1096,9 +1682,13 @@ function renderCategories(){
       if(descEl) descEl.classList.toggle('done');
       if(solved[key]){
         registerActivityToday();
+        solvedDates[key] = todayStr();
         renderStreak();
+      } else {
+        delete solvedDates[key];
       }
       renderProgress();
+      renderDailyLog();
       updateCategoryCounts();
       await saveProgress();
     });
@@ -1118,6 +1708,41 @@ function renderCategories(){
       if(showFlaggedOnly) applyFilters();
       renderProgress();
       await saveProgress();
+    });
+  });
+
+  // remark button handlers — toggle the textarea open/closed
+  container.querySelectorAll('.remark-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const row = btn.closest('.problem-row');
+      const box = row.querySelector('.remark-box');
+      box.classList.toggle('open');
+      if(box.classList.contains('open')) box.focus();
+    });
+  });
+
+  // remark textarea handlers — debounced save as you type
+  let remarkSaveTimer = null;
+  container.querySelectorAll('.remark-box').forEach(box => {
+    box.addEventListener('click', (e) => e.stopPropagation());
+    box.addEventListener('input', () => {
+      const key = box.dataset.key;
+      const val = box.value;
+      if(val.trim()){
+        remarks[key] = val;
+      } else {
+        delete remarks[key];
+      }
+      const row = box.closest('.problem-row');
+      const btn = row.querySelector('.remark-btn');
+      const hasText = !!val.trim();
+      btn.classList.toggle('has-remark', hasText);
+      btn.textContent = hasText ? '📝 Remark' : '📝 Note';
+      box.classList.toggle('has-text', hasText);
+      if(remarkSaveTimer) clearTimeout(remarkSaveTimer);
+      remarkSaveTimer = setTimeout(() => { saveProgress(); }, 400);
     });
   });
 }
@@ -1163,19 +1788,47 @@ document.getElementById('resetBtn').addEventListener('click', async () => {
   if(confirm("Reset all progress? This can't be undone.")){
     solved = {};
     flagged = {};
+    remarks = {};
+    solvedDates = {};
     streak = { current: 0, longest: 0, lastActiveDate: null };
     await saveProgress();
     renderProgress();
     renderStreak();
     renderCategories();
+    renderDailyLog();
     applyFilters();
   }
+});
+
+function openDocModal(){
+  const body = document.getElementById('docBody');
+  if(!body.dataset.rendered){
+    body.innerHTML = mdToHtml(FULL_DOC_MD);
+    body.dataset.rendered = '1';
+  }
+  document.getElementById('docModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDocModal(){
+  document.getElementById('docModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('docLinkCard').addEventListener('click', openDocModal);
+document.getElementById('docModalClose').addEventListener('click', closeDocModal);
+document.getElementById('docModal').addEventListener('click', (e) => {
+  if(e.target.id === 'docModal') closeDocModal();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeDocModal();
 });
 
 (async function init(){
   await loadProgress();
   renderProgress();
   renderStreak();
+  renderDailyLog();
   renderCategories();
   document.getElementById('loadStatus').textContent = "progress saved locally — check back anytime";
 })();
